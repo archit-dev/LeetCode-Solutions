@@ -9,8 +9,7 @@ public:
             int firstNum = num1[n1]-'0';
             int secondNum = num2[n2]-'0';
             int sum = (firstNum+carry+secondNum)%10;
-            carry = (firstNum+carry+secondNum)/10;
-            // cout<<firstNum<<" "<<secondNum<<" "<<sum<<" "<<carry<<"\n";
+            carry = (firstNum+carry+secondNum)/10; 
             ans = to_string(sum)+ans;
             n1--;
             n2--;
