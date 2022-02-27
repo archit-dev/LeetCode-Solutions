@@ -18,8 +18,6 @@ public:
         return isSame(root1->left,root2->right) && isSame(root1->right,root2->left);
     }
     bool isSymmetric(TreeNode* root) {
-        // if(!root->left && !root->right) return true;
-        // if(!root->left || !root->right) return false;
         return isSame(root,root);
     }
 };
