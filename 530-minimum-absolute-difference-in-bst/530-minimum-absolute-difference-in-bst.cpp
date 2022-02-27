@@ -11,22 +11,18 @@
  */
 class Solution {
 public:
-    void giveSortedArray(TreeNode * root, vector<int>&inorder){
+    void inorder(TreeNode* root,int &minVal, TreeNode* &prev){
         if(!root) return;
-        giveSortedArray(root->left,inorder);
-        inorder.push_back(root->val);
-        giveSortedArray(root->right,inorder);
+        inorder(root->left,minVal,prev);
+        if(prev) minVal = min(minVal,root->val - prev->val);
+        prev = root;
+        inorder(root->right,minVal,prev);
     }
+    
     int getMinimumDifference(TreeNode* root) {
-        //inorder traversal gives sorted order
-        //so basically we need to return min diff
-        //of neighbours
-        vector<int> inorder;
-        giveSortedArray(root,inorder);
-        int ans = INT_MAX;
-        for(int i=1;i<inorder.size();i++){
-            ans = min(ans,abs(inorder[i]-inorder[i-1]));
-        }
-        return ans;
+        int minVal = INT_MAX;
+        TreeNode* previous = nullptr;
+        inorder(root,minVal,previous);
+        return minVal;
     }
 };
