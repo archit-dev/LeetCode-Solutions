@@ -11,18 +11,18 @@
  */
 class Solution {
 public:
-    #define ll long long
+    #define ll unsigned long long
     int widthOfBinaryTree(TreeNode* root) {
         queue<pair<TreeNode*,ll> > q;
         q.push({root,0});
-        ll ans = INT_MIN;
+        ll ans = 0;
         while(!q.empty()){
             ll n = q.size();
             ll first,last;
             ll min_ = q.front().second;
             for(int i=0;i<n;i++){
                 TreeNode* currNode = q.front().first;
-                ll currIndex = q.front().second-min_;
+                ll currIndex = q.front().second;
                 q.pop();
                 if(i==0) first = currIndex;
                 if(i==n-1) last = currIndex;
