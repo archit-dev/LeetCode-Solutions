@@ -11,46 +11,32 @@
 class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        if(!l1 || !l2) return l1==nullptr ? l2 : l1;
-        ListNode* temp1 = l1;
-        ListNode* temp2 = l2;
+        ListNode * dummy = new ListNode();
+        ListNode * head = dummy;
         int carry = 0;
-        ListNode* sumList = new ListNode();
-        ListNode* sumListPtr = sumList;
-        while(temp1 && temp2){
-            int currSum = (temp1->val+temp2->val+carry)%10;
-            
-            sumListPtr->next = new ListNode(currSum);
-            sumListPtr = sumListPtr->next;
-
-            carry = (temp1->val+temp2->val+carry)/10;
-            temp1 = temp1->next;
-            temp2 = temp2->next;
-            
+        while(l1 && l2){
+            int sum = carry+l1->val+l2->val;
+            dummy->next = new ListNode(sum%10);
+            dummy=dummy->next;
+            l1=l1->next;
+            l2=l2->next;
+            carry=sum/10;
         }
-        while(temp1){
-            int currSum = (temp1->val+carry)%10;
-            
-            sumListPtr->next = new ListNode(currSum);
-            sumListPtr = sumListPtr->next;
-            
-            carry = (temp1->val+carry)/10;
-            temp1 = temp1->next;
-            
+        while(l1){
+            int sum = carry+l1->val;
+            carry=sum/10;
+            dummy->next = new ListNode(sum%10);
+            dummy=dummy->next;
+            l1=l1->next; 
         }
-        while(temp2){
-            int currSum = (temp2->val+carry)%10;
-            
-            sumListPtr->next = new ListNode(currSum);
-            sumListPtr = sumListPtr->next;
-            
-            carry = (temp2->val+carry)/10;
-            temp2 = temp2->next;
+        while(l2){
+            int sum = carry +l2->val;
+            carry=sum/10;
+            dummy->next = new ListNode(sum%10);
+            dummy=dummy->next;
+            l2=l2->next; 
         }
-        if(carry){
-            sumListPtr->next = new ListNode(carry);
-        }
-        return sumList->next;
-        
+        if(carry) dummy->next=new ListNode(1);
+        return head->next;
     }
 };
