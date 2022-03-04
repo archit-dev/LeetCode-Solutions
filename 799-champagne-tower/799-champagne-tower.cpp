@@ -13,12 +13,6 @@ public:
                 }
             }
         }
-        // for(int i=0;i<tower.size();i++){
-        //     for(int j=0;j<tower[i].size();j++){
-        //         cout<<tower[i][j]<<" ";
-        //     }
-        //     cout<<"\n";
-        // }
         return tower[query_row][query_glass];
     }
 };
