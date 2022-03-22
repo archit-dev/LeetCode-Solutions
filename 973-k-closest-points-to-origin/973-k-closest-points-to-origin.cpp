@@ -1,8 +1,7 @@
 class Solution {
 public:
     #define pii pair<int, vector<int> >
-    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
-        // priority_queue<pii, vector<pii>, greater<pii> > pq;
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) { 
         priority_queue<pii> pq;
         for(auto &it:points){
             int x = it[0];
