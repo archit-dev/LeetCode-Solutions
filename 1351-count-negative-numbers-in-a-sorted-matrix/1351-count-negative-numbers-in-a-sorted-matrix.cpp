@@ -10,8 +10,7 @@ public:
                 col--;
             }
             if(col==grid[0].size()-1) {
-                count+=0;
-                // cout<<" count was incremented by "<<0<<" \n ";
+                count+=0; 
             }
             if(col==-1) {
                 count+=grid[0].size(); 
