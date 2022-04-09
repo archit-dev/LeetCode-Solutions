@@ -1,29 +1,56 @@
 class Solution {
 public:
-    int getNegativeIndex(vector<int> & row, int low , int high){
-        int ans = high+1;
-        while(low<=high){
-            int mid = low + (high-low)/2;
-            if(row[mid]<0){
-                ans = mid;
-                high = mid-1;
-            }else{
-                low = mid+1;
-            }
-        }
-        return ans;
-    }
     
     int countNegatives(vector<vector<int>>& grid){
-        int n = grid.size();
-        int m = grid[0].size();
+        int row = 0;
+        int col = grid[0].size()-1;
         int count = 0;
-        for(int i=0;i<n;i++){
-            int negativeIndex = getNegativeIndex(grid[i],0,m-1);
-            count += m - negativeIndex;
+        while(row<grid.size()){
+            while(col>=0 && grid[row][col]<0){
+                col--;
+            }
+            if(col==grid[0].size()-1) {
+                count+=0;
+                // cout<<" count was incremented by "<<0<<" \n ";
+            }
+            if(col==-1) {
+                count+=grid[0].size();
+                // cout<<" count was incremented by "<<grid[0].size()<<" \n ";
+            }
+            else{
+              count+= grid[0].size() - col - 1;
+              // cout<<" count was incremented by "<<grid[0].size() - col - 1<<" \n ";
+            } 
+            row++;
         }
         return count;
-    } 
+    }
+    
+    // Better solution : ------>
+//     int getNegativeIndex(vector<int> & row, int low , int high){
+//         int ans = high+1;
+//         while(low<=high){
+//             int mid = low + (high-low)/2;
+//             if(row[mid]<0){
+//                 ans = mid;
+//                 high = mid-1;
+//             }else{
+//                 low = mid+1;
+//             }
+//         }
+//         return ans;
+//     }
+    
+//     int countNegatives(vector<vector<int>>& grid){
+//         int n = grid.size();
+//         int m = grid[0].size();
+//         int count = 0;
+//         for(int i=0;i<n;i++){
+//             int negativeIndex = getNegativeIndex(grid[i],0,m-1);
+//             count += m - negativeIndex;
+//         }
+//         return count;
+//     } 
     
     //Naive solution:::---->>>
     // int countNegatives(vector<vector<int>>& grid) {
