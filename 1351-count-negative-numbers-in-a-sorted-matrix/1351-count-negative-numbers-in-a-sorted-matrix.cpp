@@ -14,12 +14,10 @@ public:
                 // cout<<" count was incremented by "<<0<<" \n ";
             }
             if(col==-1) {
-                count+=grid[0].size();
-                // cout<<" count was incremented by "<<grid[0].size()<<" \n ";
+                count+=grid[0].size(); 
             }
             else{
-              count+= grid[0].size() - col - 1;
-              // cout<<" count was incremented by "<<grid[0].size() - col - 1<<" \n ";
+              count+= grid[0].size() - col - 1; 
             } 
             row++;
         }
