@@ -12,27 +12,24 @@
 class Solution {
 public:
     vector<int> inorderTraversal(TreeNode* root) {
-        vector<int>inorder;
-        TreeNode * curr = root;
-        while(curr!=nullptr){
-            if(curr->left==nullptr){
-                //this curr will itself be the root and included in the inorder
+        vector<int> inorder;
+        if(!root) return inorder;
+        stack<pair<TreeNode*,int> > st;
+        st.push({root,1});
+        while(!st.empty()){
+            int state = st.top().second;
+            TreeNode * curr = st.top().first;
+            if(state==1){
+                st.top().second++;
+                if(curr->left!=nullptr) st.push({curr->left,1}) ;
+            }
+            else if(state==2){
+                st.top().second++;
                 inorder.push_back(curr->val);
-                curr=curr->right;
-            }else{
-                //find the rightmost guy in the left subtree
-                TreeNode * prev = curr->left;
-                while(prev->right!=nullptr && prev->right!=curr){
-                    prev = prev->right;
-                }
-                if(prev->right==nullptr){
-                    prev->right = curr;
-                    curr = curr->left;
-                }else{
-                    prev->right = nullptr;
-                    inorder.push_back(curr->val);
-                    curr=curr->right;
-                }
+                if(curr->right!=nullptr) st.push({curr->right,1});
+            }
+            else{
+                st.pop();
             }
         }
         return inorder;
