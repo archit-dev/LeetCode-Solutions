@@ -11,28 +11,16 @@
  */
 class Solution {
 public:
+    void inorderHelper(TreeNode* root, vector<int>& ans){
+        if(!root) return;
+        inorderHelper(root->left,ans);
+        ans.push_back(root->val);
+        inorderHelper(root->right,ans);
+    }
+    
     vector<int> inorderTraversal(TreeNode* root) {
-        stack<pair<TreeNode*,int> > st;
-        st.push({root,1});
-        vector<int> inorder;
-        if(!root) return inorder;
-        while(!st.empty()){
-            TreeNode * current = st.top().first;
-            int state = st.top().second;
-            if(state==1){
-                //preorder+= current->val;
-                st.top().second++;
-                if(current->left) st.push({current->left,1});
-            }else if(state==2){
-                //inorder
-                inorder.push_back(current->val);
-                st.top().second++;
-                if(current->right) st.push({current->right,1});
-            }else if(state==3){
-                //postorder += current->val;
-                st.pop();
-            }
-        }
-        return inorder;
+        vector<int> ans;
+        inorderHelper(root,ans);
+        return ans;
     }
 };
