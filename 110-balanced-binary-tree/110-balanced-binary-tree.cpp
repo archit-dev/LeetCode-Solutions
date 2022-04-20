@@ -11,16 +11,15 @@
  */
 class Solution {
 public:
-    int depth(TreeNode * root){
-        if(!root) return 0;
-        return 1 + max(depth(root->left),depth(root->right));
+    int maxDepthOfTree(TreeNode *root){
+        if(root==nullptr) return 0;
+        return 1 + max(maxDepthOfTree(root->left),maxDepthOfTree(root->right));
     }
-    
     bool isBalanced(TreeNode* root) {
         if(!root) return true;
-        int heightLeft = depth(root->left);
-        int heightRight = depth(root->right);
-        if(abs(heightLeft-heightRight) > 1) return false;
+        int left = maxDepthOfTree(root->left);
+        int right = maxDepthOfTree(root->right);
+        if(abs(left-right)>1) return false;
         return isBalanced(root->left) && isBalanced(root->right);
     }
 };
