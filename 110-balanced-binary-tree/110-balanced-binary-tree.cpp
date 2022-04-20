@@ -18,7 +18,7 @@ public:
         int rightHeight = maxDepthOfTree(root->right);
         if(rightHeight == -1) return -1;
         if(abs(leftHeight-rightHeight)>1) return -1;
-        return 1 + max(maxDepthOfTree(root->left),maxDepthOfTree(root->right));
+        return 1 + max(leftHeight,rightHeight);
     }
     bool isBalanced(TreeNode* root) {
         return maxDepthOfTree(root)!=-1;
