@@ -11,21 +11,22 @@
  */
 class Solution {
 public:
-    void solve(TreeNode* root,vector<string>& ans,string pathSoFar){
-        if(!root->left && !root->right){
-            ans.push_back(pathSoFar+to_string(root->val));
-            return;
+    void pathsHelper(TreeNode * root, vector<string>&paths, string currentPath){
+        if(root->left==nullptr && root->right==nullptr){
+            if(currentPath.size()!=0) currentPath+= "->";
+            currentPath+=to_string(root->val);
+            paths.push_back(currentPath);
+            return ;
         }
-        //left subtree
-        if(root->left) solve(root->left,ans,pathSoFar+to_string(root->val)+"->");
-        //right subtree
-        if(root->right) solve(root->right,ans,pathSoFar+to_string(root->val)+"->");
-        return;
+        if(currentPath.size()==0) currentPath = to_string(root->val);
+        else currentPath+= "->" + to_string(root->val);
+        if(root->left) pathsHelper(root->left,paths,currentPath);
+        if(root->right) pathsHelper(root->right,paths,currentPath);
     }
     
     vector<string> binaryTreePaths(TreeNode* root) {
-        vector<string> ans;
-        solve(root,ans,"");
-        return ans;
+        vector<string> paths;
+        pathsHelper(root,paths,"");
+        return paths;
     }
 };
