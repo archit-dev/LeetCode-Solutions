@@ -11,16 +11,30 @@
  */
 class Solution {
 public:
-    void inorderHelper(TreeNode* root, vector<int>& ans){
-        if(!root) return;
-        inorderHelper(root->left,ans);
-        ans.push_back(root->val);
-        inorderHelper(root->right,ans);
-    }
-    
     vector<int> inorderTraversal(TreeNode* root) {
-        vector<int> ans;
-        inorderHelper(root,ans);
-        return ans;
+        vector<int>inorder;
+        TreeNode * curr = root;
+        while(curr!=nullptr){
+            if(curr->left==nullptr){
+                //this curr will itself be the root and included in the inorder
+                inorder.push_back(curr->val);
+                curr=curr->right;
+            }else{
+                //find the rightmost guy in the left subtree
+                TreeNode * prev = curr->left;
+                while(prev->right!=nullptr && prev->right!=curr){
+                    prev = prev->right;
+                }
+                if(prev->right==nullptr){
+                    prev->right = curr;
+                    curr = curr->left;
+                }else{
+                    prev->right = nullptr;
+                    inorder.push_back(curr->val);
+                    curr=curr->right;
+                }
+            }
+        }
+        return inorder;
     }
 };
