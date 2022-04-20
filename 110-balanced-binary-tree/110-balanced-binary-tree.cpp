@@ -13,13 +13,14 @@ class Solution {
 public:
     int maxDepthOfTree(TreeNode *root){
         if(root==nullptr) return 0;
+        int leftHeight = maxDepthOfTree(root->left);
+        if(leftHeight==-1) return -1;
+        int rightHeight = maxDepthOfTree(root->right);
+        if(rightHeight == -1) return -1;
+        if(abs(leftHeight-rightHeight)>1) return -1;
         return 1 + max(maxDepthOfTree(root->left),maxDepthOfTree(root->right));
     }
     bool isBalanced(TreeNode* root) {
-        if(!root) return true;
-        int left = maxDepthOfTree(root->left);
-        int right = maxDepthOfTree(root->right);
-        if(abs(left-right)>1) return false;
-        return isBalanced(root->left) && isBalanced(root->right);
+        return maxDepthOfTree(root)!=-1;
     }
 };
