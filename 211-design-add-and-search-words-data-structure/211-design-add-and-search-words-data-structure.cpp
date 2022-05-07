@@ -48,41 +48,29 @@ public:
     
     bool search(string word) {
         Node * node = root;
-        for(int i=0; i<word.size();i++){
-            //check if the current node has the character
-            char currentChar = word[i];
-            if(currentChar=='.'){
-                for(int j=0;j<26;j++){
-                    if(node->links[j]!=NULL && search(word.substr(i+1),node->getNext(j+'a'))){
-                        return true;
-                    }
-                }
-                return false;
-            }
-            if(!node->containsKey(currentChar)){
-                return false;
-            }
-            node = node->getNext(currentChar);
-        }
-        return node->isEnd();
+        return helper(word,node);
     }
-    bool search(string word,Node* root) {
-        Node * node = root;
+    
+    bool helper(string word,Node* node) {
         for(int i=0; i<word.size();i++){
             //check if the current node has the character
             char currentChar = word[i];
-            if(currentChar=='.'){
+            if(currentChar!='.'){
+                if(!node->containsKey(currentChar)){
+                    return false;
+                }
+                node = node->getNext(currentChar);
+            }
+            else{
+                bool found = false;
                 for(int j=0;j<26;j++){
-                    if(node->links[j]!=NULL && search(word.substr(i+1),node->getNext(j+'a'))){
-                        return true;
+                    if(node->links[j]!=NULL){
+                        found = helper(word.substr(i+1),node->getNext(j+'a'));
+                        if(found) return true;
                     }
                 }
                 return false;
             }
-            if(!node->containsKey(currentChar)){
-                return false;
-            }
-            node = node->getNext(currentChar);
         }
         return node->isEnd();
     }
