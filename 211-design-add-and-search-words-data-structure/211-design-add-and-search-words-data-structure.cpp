@@ -47,8 +47,7 @@ public:
     }
     
     bool search(string word) {
-        Node * node = root;
-        return helper(word,node);
+        return helper(word,root);
     }
     
     bool helper(string word,Node* node) {
