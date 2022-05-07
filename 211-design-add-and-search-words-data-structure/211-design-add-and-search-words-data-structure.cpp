@@ -1,50 +1,83 @@
-struct TrieNode{
-    bool isKey;
-    TrieNode* next[26];
-    TrieNode():isKey(false){
-        memset(next, NULL, sizeof(next));
+struct Node{
+    Node * links[26];
+    bool flag = false;
+    
+    bool containsKey(char x){
+        return links[x-'a']!=NULL ? true : false;
+    }
+    
+    void putKey(char x){
+        links[x-'a'] = new Node();
+    }
+    
+    Node* getNext(char x){
+        return links[x-'a'];
+    }
+    
+    bool isEnd(){
+        return flag;
+    }
+    
+    void markEnd(){
+        flag = true;
     }
 };
 
 class WordDictionary {
+private:
+    Node * root;
+    
 public:
     WordDictionary() {
-        root = new TrieNode();
+        root = new Node();
     }
     
     void addWord(string word) {
-        TrieNode* node = root;
-        for(auto c: word){
-            if(!node->next[c - 'a']) node->next[c - 'a'] = new TrieNode();
-            node = node->next[c - 'a'];
+        Node * node = root;
+        for(char currentChar : word){
+            //check if the current node has the character
+            //if not, then we add the character and create a reference node for it
+            if(!node->containsKey(currentChar)){
+                //creating a new node for it
+                node->putKey(currentChar);
+            }
+            node = node->getNext(currentChar);
         }
-        node->isKey = true;
+        node->markEnd();
     }
     
     bool search(string word) {
-        return helper(word, root);
+        return helper(word,root);
     }
-
-private:
-    TrieNode* root;
     
-    bool helper(string word, TrieNode* node){
-        for(int i = 0; i < word.size(); i++){
-            char c = word[i];
-            if(c != '.'){
-                if(!node->next[c - 'a']) return false;
-                node = node->next[c - 'a'];
+    bool helper(string word,Node* node) {
+        for(int i=0; i<word.size();i++){
+            //check if the current node has the character
+            char currentChar = word[i];
+            if(currentChar!='.'){
+                if(!node->containsKey(currentChar)){
+                    return false;
+                }
+                node = node->getNext(currentChar);
             }
             else{
                 bool found = false;
-                int j = 0;
-                for(; j < 26; j++){
-                    if(node->next[j]) found |= helper(word.substr(i + 1), node->next[j]);
-                    if(found) return true;
+                for(int j=0;j<26;j++){
+                    if(node->links[j]!=NULL){
+                        found = helper(word.substr(i+1),node->getNext(j+'a'));
+                        if(found) return true;
+                    }
                 }
-                if(j == 26) return false;
+                return false;
             }
         }
-        return node->isKey;
+        return node->isEnd();
     }
 };
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary* obj = new WordDictionary();
+ * obj->addWord(word);
+ * bool param_2 = obj->search(word);
+ */
