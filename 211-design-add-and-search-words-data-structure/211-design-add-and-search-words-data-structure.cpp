@@ -47,11 +47,11 @@ public:
     }
     
     bool search(string word) {
-        return helper(word,root);
+        return helper(word,0,root);
     }
     
-    bool helper(string word,Node* node) {
-        for(int i=0; i<word.size();i++){
+    bool helper(string & word,int pos,Node* node) {
+        for(int i=pos; i<word.size();i++){
             //check if the current node has the character
             char currentChar = word[i];
             if(currentChar!='.'){
@@ -64,7 +64,7 @@ public:
                 bool found = false;
                 for(int j=0;j<26;j++){
                     if(node->links[j]!=NULL){
-                        found = helper(word.substr(i+1),node->getNext(j+'a'));
+                        found = helper(word,i+1,node->getNext(j+'a'));
                         if(found) return true;
                     }
                 }
