@@ -19,7 +19,7 @@ public:
             }
             else{
                 slow->next = fast;
-                slow = slow->next;
+                slow = fast;
             }
         }
         slow->next = nullptr;
