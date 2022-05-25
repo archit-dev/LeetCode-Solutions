@@ -12,10 +12,14 @@ class Solution
         if(a.size()!=b.size()){
             return false;
         }
-        sort(a.begin(),a.end());
-        sort(b.begin(),b.end());
+        int a_[26]={0};
+        int b_[26]={0};
         for(int i=0;i<a.size();i++){
-            if(a[i]!=b[i]) return false;
+            a_[a[i]-'a']++;
+            b_[b[i]-'a']++;
+        }
+        for(int i=0;i<26;i++){
+            if(a_[i]!=b_[i]) return false;
         }
         return true;
     }
