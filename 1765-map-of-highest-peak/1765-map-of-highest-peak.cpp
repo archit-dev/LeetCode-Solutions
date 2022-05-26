@@ -42,8 +42,7 @@ public:
             for(int i=0;i<4;i++){
                 int newX = x+dx[i] , newY = y+dy[i];
                 if(isValid(newX,newY,n,m) && heightMatrix[newX][newY]==-1){
-                    heightMatrix[newX][newY] = max(heightMatrix[newX][newY],
-                                                  h+1);
+                    heightMatrix[newX][newY] = h+1;
                     Queue.push(height(newX,newY,heightMatrix[newX][newY]));
                 }
             }
