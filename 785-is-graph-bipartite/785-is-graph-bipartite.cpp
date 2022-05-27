@@ -1,20 +1,26 @@
 class Solution {
 public:
-    bool bipartiteDFS(int node,int color,vector<vector<int>>& graph,vector<int>& colors){
+    bool bipartiteBFS(int node,int color,vector<vector<int>>& graph,vector<int>& colors){
+        queue<pair<int,int>>Queue;
         colors[node] = color;
-        for(auto nbr : graph[node]){
-            //if unvisited
-            if(colors[nbr]==-1){
-                if(!bipartiteDFS(nbr,!color,graph,colors)){
+        Queue.push({node,color});
+        while(!Queue.empty()){
+            int currentNode = Queue.front().first;
+            int currentColor = Queue.front().second;
+            Queue.pop();
+            for(auto nbr:graph[currentNode]){
+                //if the nbr is not visited
+                if(colors[nbr]==-1){
+                    colors[nbr]=!currentColor;
+                    Queue.push({nbr,colors[nbr]});
+                }
+                //else if it is visited and has same color 
+                //as the current node
+                else if(colors[nbr]!=-1 && colors[nbr]==currentColor){
                     return false;
                 }
             }
-            //if visited and has same color
-            else if(colors[nbr]!=-1 && colors[nbr]==color){
-                return false;
-            }
         }
-        //if no neighbours have same colors, graph is bipartite
         return true;
     }
     
@@ -23,11 +29,14 @@ public:
         vector<int>colors(v,-1);
         for(int i=0;i<v;i++){
             if(colors[i]==-1){
-                if(!bipartiteDFS(i,0,graph,colors)){
+                //if the graph is not bipartite for any of the 
+                //components, return false;
+                if(!bipartiteBFS(i,0,graph,colors)){
                     return false;
                 }
             }
         }
+        //the graph is bipartite and return true
         return true;
     }
 };
