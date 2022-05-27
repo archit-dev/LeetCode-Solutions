@@ -24,8 +24,8 @@ public:
         for(int i=0;i<prerequisites.size();i++){
             int a = prerequisites[i][0];
             int b = prerequisites[i][1];
-            //a-->b
-            graph[a].push_back(b);
+            //b-->a
+            graph[b].push_back(a);
         }
         vector<int> visitedSoFar(numCourses,0), visitedOnThisPath(numCourses,0);
         for(int i=0;i<numCourses;i++){
