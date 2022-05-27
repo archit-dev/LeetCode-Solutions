@@ -7,31 +7,34 @@ class Solution
 {
 	public:
 	//Function to return list containing vertices in Topological order. 
-	void topoSortDFS(int node,vector<int>graph[],vector<bool>& visited,stack<int>& topo){
-	    visited[node] = true;
-	    for(auto nbr:graph[node]){
-	        if(!visited[nbr]){
-	            topoSortDFS(nbr,graph,visited,topo);
-	        }
-	    }
-	    topo.push(node);
-	}
-	
-	vector<int> topoSort(int V, vector<int> adj[]) 
+	vector<int> topoSort(int V, vector<int> graph[]) 
 	{
-	    // code here
-	    stack<int> topo;
-	    vector<bool>visited(V,false);
-	    for(int i=0;i<V;i++){
-	        if(!visited[i]){
-	            topoSortDFS(i,adj,visited,topo);
+	    vector<int>indegree(V,0);
+	    //fill up the indegree array
+	    for(int node=0;node<V;node++){
+	        for(auto nbr:graph[node]){
+	            indegree[nbr]++;
 	        }
 	    }
-	    vector<int>ans;
-	    while(!topo.empty()){
-	        ans.push_back(topo.top());
-	        topo.pop();
+	    //add all the 0 indegree elements to a queue
+	    queue<int>Queue;
+	    for(int i=0;i<V;i++){
+	        if(indegree[i]==0) Queue.push(i);
 	    }
+	    int countOfVertices = 0;
+	    vector<int>ans;
+	    while(!Queue.empty()){
+	        int node = Queue.front();
+	        Queue.pop();
+	        ans.push_back(node);
+	        countOfVertices++;
+	        //now decrement the indegree of all the nbrs
+	        for(auto nbr:graph[node]){
+	            indegree[nbr]--;
+	            if(indegree[nbr]==0) Queue.push(nbr);
+	        }
+	    }
+	    //if(countOfVertices!=V) cout<<"Toposort unsuccessful";
 	    return ans;
 	}
 };
