@@ -1,29 +1,28 @@
 class Solution {
 public:
-    vector<vector<int>> solve(vector<int>& candidates,int n, int target){
-        if(n<0 || target<0){
-            vector<vector<int>> empty;
-            return empty;
-        }
+    void helper(int idx,int target,vector<int>& candidates,vector<int>& currentComb,
+               vector<vector<int> >& combinations)
+    {
         if(target==0){
-            vector<vector<int>> notEmpty;
-            vector<int>temp;
-            notEmpty.push_back(temp);
-            return notEmpty;
+            combinations.push_back(currentComb);
+            return;
         }
-        vector<vector<int>>ans;
-        vector<vector<int>>include = solve(candidates,n,target-candidates[n]);
-        vector<vector<int>>notInclude = solve(candidates,n-1,target);
-        for(auto &it:include){
-            it.push_back(candidates[n]);
-            ans.push_back(it);
-        }
-        for(auto &it:notInclude){
-            ans.push_back(it);
-        }
-        return ans;
+        if(target<0) return;
+        if(idx==candidates.size()) return;
+        
+        //include
+        currentComb.push_back(candidates[idx]);
+        helper(idx,target-candidates[idx],candidates,currentComb,combinations);
+        
+        //exclude
+        currentComb.pop_back();
+        helper(idx+1,target,candidates,currentComb,combinations);
     }
+    
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        return solve(candidates,candidates.size()-1,target);
+        vector<int>currentComb;
+        vector<vector<int> >combinations;
+        helper(0,target,candidates,currentComb,combinations);
+        return combinations;
     }
 };
