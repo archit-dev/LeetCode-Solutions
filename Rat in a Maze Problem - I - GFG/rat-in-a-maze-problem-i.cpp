@@ -10,32 +10,39 @@ using namespace std;
 
 class Solution{
     private:
-    void solve(vector<string>& paths,string currentPath,int cr,int cc,
-            vector<vector<int>> & maze,int n)
+    bool isValid(int x,int y,int n){
+        if(x>=0 && x<n && y>=0 && y<n) return true;
+        return false;
+    }
+    
+    void solve(vector<string> &paths,string currentPath,
+                int cr,int cc,vector<vector<int>>& maze,int n)
     {
-        if(cr>=n || cr<0 || cc>=n || cc<0 || maze[cr][cc]==0) return;
-        
-        if(cr==n-1 && cc==n-1) {
+        if(cr==n-1 && cc==n-1){
             paths.push_back(currentPath);
             return;
         }
+        if(maze[cr][cc]==0) return;
         maze[cr][cc] = 0;
-        solve(paths,currentPath+'U',cr-1,cc,maze,n);
-        
-        solve(paths,currentPath+'D',cr+1,cc,maze,n);
-        
-        solve(paths,currentPath+'L',cr,cc-1,maze,n);
-
-        solve(paths,currentPath+'R',cr,cc+1,maze,n);
+        int dx[4]={1,0,0,-1};
+        int dy[4]={0,-1,1,0};
+        string possPaths = "DLRU";
+        for(int i=0;i<4;i++){
+            int newX = cr+dx[i];
+            int newY = cc+dy[i];
+            if(isValid(newX,newY,n) && maze[newX][newY]==1){
+                solve(paths,currentPath+possPaths[i],newX,newY,maze,n);
+            }
+        }
         maze[cr][cc] = 1;
     }
+    
     public:
     vector<string> findPath(vector<vector<int>> &m, int n) {
         // Your code goes here
-        vector<string> allPaths;
-        string s;
-        solve(allPaths,s,0,0,m,n);
-        return allPaths;
+        vector<string>paths;
+        solve(paths,"",0,0,m,n);
+        return paths;
     }
 };
 
