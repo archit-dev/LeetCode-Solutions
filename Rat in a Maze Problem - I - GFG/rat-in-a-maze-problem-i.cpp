@@ -10,7 +10,7 @@ using namespace std;
 
 class Solution{
     private:
-    void solve(vector<string>& paths,string &currentPath,int cr,int cc,
+    void solve(vector<string>& paths,string currentPath,int cr,int cc,
             vector<vector<int>> & maze,int n)
     {
         if(cr>=n || cr<0 || cc>=n || cc<0 || maze[cr][cc]==0) return;
@@ -20,22 +20,13 @@ class Solution{
             return;
         }
         maze[cr][cc] = 0;
-        currentPath.push_back('U');
-        solve(paths,currentPath,cr-1,cc,maze,n);
-        currentPath.pop_back();
+        solve(paths,currentPath+'U',cr-1,cc,maze,n);
         
-        currentPath.push_back('D');
-        solve(paths,currentPath,cr+1,cc,maze,n);
-        currentPath.pop_back();
+        solve(paths,currentPath+'D',cr+1,cc,maze,n);
         
-        currentPath.push_back('L');
-        solve(paths,currentPath,cr,cc-1,maze,n);
-        currentPath.pop_back();
-        
-        currentPath.push_back('R');
-        solve(paths,currentPath,cr,cc+1,maze,n);
-        currentPath.pop_back();
-        
+        solve(paths,currentPath+'L',cr,cc-1,maze,n);
+
+        solve(paths,currentPath+'R',cr,cc+1,maze,n);
         maze[cr][cc] = 1;
     }
     public:
