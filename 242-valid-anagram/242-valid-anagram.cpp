@@ -6,7 +6,6 @@ public:
             alpha[x]+=1;
         }
         for(char x:t){
-            if(alpha.find(x)==alpha.end()) return false;
             alpha[x]-=1;
         }
         for(auto &it:alpha){
