@@ -1,51 +1,37 @@
 class Solution {
 public:
     void setZeroes(vector<vector<int>>& matrix) {
-        bool isRowZero = false;
-        bool isColZero = false;
-        int row = matrix.size();
-        int col = matrix[0].size();
-        for(int i=0;i<row;i++){
-            for(int j=0;j<col;j++){
-                if(i==0 && j==0){
-                    if(matrix[i][j]==0){
-                        isRowZero = isColZero = true;
-                    }
-                }
-                else if(i==0){
-                    //to find if there is original 0 in row0
-                    if(matrix[i][j]==0) isRowZero = true;
-                }
-                else if(j==0){
-                    //to find if there is original 0 in col0
-                    if(matrix[i][j]==0) isColZero = true;
-                }
-                else{
-                    if(matrix[i][j]==0){
-                        matrix[0][j] = 0;
-                        matrix[i][0] = 0;
-                    }
-                }
-            }
+        int m = matrix.size(), n = matrix[0].size();
+        bool rowZero = false, colZero = false;
+        
+        for(int row=0;row<m;row++){
+            if(matrix[row][0]==0) rowZero = true;
         }
         
-        for(int i=row-1;i>=1;i--){
-            for(int j=col-1;j>=1;j--){
-                if(matrix[0][j]==0 || matrix[i][0]==0){
-                    matrix[i][j] = 0;
+        for(int col=0;col<n;col++){
+            if(matrix[0][col]==0) colZero = true;
+        }
+        
+        for(int row=1;row<m;row++){
+            for(int col=1;col<n;col++){
+                if(matrix[row][col]==0){
+                    matrix[0][col] = 0;
+                    matrix[row][0] = 0;
                 }
             }
         }
-        if(isRowZero){
-            for(int i=0;i<col;i++){
-                matrix[0][i] = 0;
+        for(int row=1;row<m;row++){
+            for(int col=1;col<n;col++){
+                if(matrix[0][col]==0 || matrix[row][0] ==0){
+                    matrix[row][col]=0;
+                }
             }
         }
-        if(isColZero){
-            for(int i=0;i<row;i++){
-                matrix[i][0] = 0;
-            }
+        if(rowZero){
+            for(int row=0;row<m;row++) matrix[row][0] = 0;
         }
-        
+        if(colZero){
+            for(int col=0;col<n;col++) matrix[0][col] = 0;
+        }
     }
 };
