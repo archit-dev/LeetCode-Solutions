@@ -1,31 +1,26 @@
 class Solution {
 public:
-    void helper(int idx,int target,vector<int>& candidates,vector<int>& currentComb,
-               vector<vector<int> >& combinations)
-    {
-        if(target==0){
-            combinations.push_back(currentComb);
+    void helper(vector<vector<int>>&ans,vector<int>& cand,int tgt,vector<int>& curr,int idx){
+        if(tgt<0) return;
+        if(tgt==0){
+            ans.push_back(curr);
             return;
         }
-        if(target<0) return;
-        if(idx==candidates.size()) return;
-        
-        //include
-        currentComb.push_back(candidates[idx]);
-        helper(idx+1,target-candidates[idx],candidates,currentComb,combinations);
-        
-        //exclude
-        currentComb.pop_back();
-        int currentNum = candidates[idx];
-        while(idx<candidates.size() && currentNum==candidates[idx]) idx++;
-        helper(idx,target,candidates,currentComb,combinations);
+        if(idx==cand.size()) return;
+        //include 
+        curr.push_back(cand[idx]);
+        helper(ans,cand,tgt-cand[idx],curr,idx+1);
+        //exlcude
+        curr.pop_back();
+        int currelement = cand[idx];
+        while(idx<cand.size() && currelement==cand[idx]) idx++;
+        helper(ans,cand,tgt,curr,idx);
     }
-    
     vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
-        vector<int>currentComb;
-        vector<vector<int> >combinations;
+        vector<vector<int>>ans;
+        vector<int>curr;
         sort(candidates.begin(),candidates.end());
-        helper(0,target,candidates,currentComb,combinations);
-        return combinations;
+        helper(ans,candidates,target,curr,0);
+        return ans;
     }
 };
