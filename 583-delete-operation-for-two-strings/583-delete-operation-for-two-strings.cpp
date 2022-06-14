@@ -1,16 +1,27 @@
 class Solution {
 public:
-    int LCS(string a,string b,int ptr1,int ptr2,vector<vector<int>>&dp){
-        if(ptr1==a.size() || ptr2==b.size()) return 0;
-        if(dp[ptr1][ptr2]!=-1) return dp[ptr1][ptr2];
-        if(a[ptr1]==b[ptr2]){
-            return dp[ptr1][ptr2] = 1+LCS(a,b,ptr1+1,ptr2+1,dp);
+    
+    int dp[1001][1001];
+    
+    int LCSHelper(string &word1 , string &word2 , int n, int m){
+        if(n==0 || m == 0){
+            return 0;
         }
-        return dp[ptr1][ptr2] = max(LCS(a,b,ptr1+1,ptr2,dp),LCS(a,b,ptr1,ptr2+1,dp));
+        if(dp[n][m]!=-1){
+            return dp[n][m];
+        }
+        if(word1[n-1] == word2[m-1]){
+            return dp[n][m] = 1+LCSHelper(word1,word2,n-1,m-1);
+        }else{
+            return dp[n][m] = max(LCSHelper(word1,word2,n,m-1),LCSHelper(word1,word2,n-1,m));
+        }
     }
+    
     int minDistance(string word1, string word2) {
-        vector<vector<int> >dp(word1.size(),vector<int>(word2.size(),-1));
-        int lcs = LCS(word1,word2,0,0,dp);
-        return word1.size()+word2.size()-2*lcs;
+        int n = word1.size();
+        int m = word2.size();
+        memset(dp,-1,sizeof(dp));
+        int lcsLength = LCSHelper(word1,word2,n,m);
+        return (n-lcsLength)+ (m-lcsLength);
     }
 };
