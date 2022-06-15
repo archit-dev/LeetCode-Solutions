@@ -4,7 +4,7 @@ public:
         return s.size() < ss.size();
     }
     
-    bool check(string &a,string &b){
+    bool check(string& a,string& b){
         int n = a.size(), m = b.size();
         if(m-n!=1) return false;
         bool skip = false;
@@ -21,23 +21,23 @@ public:
         }
         return true;
     }
-    int helper(vector<string>& words,int ptr,int prev)
+    int helper(vector<string>& words,int ptr,int prev,
+               vector<vector<int>>& dp)
     {
-        vector<int>dp(words.size(),1);
-        //initially every word has a length 1
-        for(int i=0;i<words.size();i++){
-            for(int prev = 0;prev<i;prev++){
-                if(check(words[prev],words[i])){
-                    dp[i] = max(dp[i],1+dp[prev]);
-                }
-            }
+        if(words.size()==ptr) return 0;
+        if(dp[ptr][prev+1]!=-1) return dp[ptr][prev+1];
+        int exclude = 0,include = 0;
+        exclude = helper(words,ptr+1,prev,dp);
+        if(prev==-1 || check(words[prev],words[ptr])){
+            include = helper(words,ptr+1,ptr,dp) + 1;
         }
-        return *max_element(dp.begin(),dp.end());
+        return dp[ptr][prev+1] = max(include,exclude);
     }
     
     int longestStrChain(vector<string>& words) {
         int n = words.size();
+        vector<vector<int>>dp(n,vector<int>(n,-1));
         sort(words.begin(),words.end(),cmp);
-        return helper(words,0,-1); 
+        return helper(words,0,-1,dp); 
     }
 };
