@@ -1,70 +1,76 @@
-class LRUCache {
-  public:
-    class node {
-      public:
-        int key;
-      int val;
-      node * next;
-      node * prev;
-      node(int _key, int _val) {
-        key = _key;
-        val = _val;
-      }
+class LRUCache { 
+public:
+    class LRUNode{
+        public:
+            int key,value;
+            LRUNode* next, *prev;
+        
+            LRUNode(int key_,int val_){
+                key = key_;
+                value = val_;
+                next = nullptr;
+                prev = nullptr;
+            }
     };
-
-  node * head = new node(-1, -1);
-  node * tail = new node(-1, -1);
-
-  int cap;
-  unordered_map < int, node * > m;
-
-  LRUCache(int capacity) {
-    cap = capacity;
-    head -> next = tail;
-    tail -> prev = head;
-  }
-
-  void addnode(node * newnode) {
-    node * temp = head -> next;
-    newnode -> next = temp;
-    newnode -> prev = head;
-    head -> next = newnode;
-    temp -> prev = newnode;
-  }
-
-  void deletenode(node * delnode) {
-    node * delprev = delnode -> prev;
-    node * delnext = delnode -> next;
-    delprev -> next = delnext;
-    delnext -> prev = delprev;
-  }
-
-  int get(int key_) {
-    if (m.find(key_) != m.end()) {
-      node * resnode = m[key_];
-      int res = resnode -> val;
-      m.erase(key_);
-      deletenode(resnode);
-      addnode(resnode);
-      m[key_] = head -> next;
-      return res;
+    
+    unordered_map<int,LRUNode*> mp;
+    LRUNode * head = new LRUNode(-1,-1);
+    LRUNode * tail = new LRUNode(-1,-1);
+    int capa;
+    
+    LRUCache(int capacity) {
+        capa = capacity;
+        head->next = tail;
+        tail->prev = head;
+    }
+    
+    void addNode(LRUNode* newNode){
+        LRUNode* temp = head->next;
+        head->next = newNode;
+        newNode->next = temp;
+        newNode->prev = head;
+        temp->prev = newNode; 
+    }
+    
+    void deleteNode(LRUNode* reqNode){
+        LRUNode * prevNode = reqNode->prev;
+        LRUNode * nextNode = reqNode->next;
+        prevNode->next = nextNode;
+        nextNode->prev = prevNode;
+        // delete reqNode; 
     }
 
-    return -1;
-  }
-
-  void put(int key_, int value) {
-    if (m.find(key_) != m.end()) {
-      node * existingnode = m[key_];
-      m.erase(key_);
-      deletenode(existingnode);
+    int get(int key_) {
+        //if not found
+        if(mp.find(key_)==mp.end()) return -1;
+        
+        //if found
+        LRUNode * reqNode = mp[key_];
+        int val = reqNode->value;
+        deleteNode(reqNode);
+        mp.erase(key_);
+        addNode(reqNode);
+        mp[key_] = head->next;
+        return val;
     }
-    if (m.size() == cap) {
-      m.erase(tail -> prev -> key);
-      deletenode(tail -> prev);
-    }
 
-    addnode(new node(key_, value));
-    m[key_] = head -> next;
-  }
+    void put(int key_, int value) {
+        if(mp.find(key_)!=mp.end()){
+            //this node already exists
+            //remove this node
+            LRUNode * reqNode = mp[key_];
+            mp.erase(key_);
+            deleteNode(reqNode);
+        }
+        if(mp.size()==capa){
+            //first delete the last node and then insert
+            int temp = tail->prev->key;
+            deleteNode(tail->prev);
+            mp.erase(temp);
+        }
+        //add the node
+        LRUNode* newNode = new LRUNode(key_,value);
+        addNode(newNode);
+        mp[key_] = head->next;
+    }
 };
