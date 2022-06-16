@@ -1,19 +1,33 @@
 class Solution {
-public:
+    private:
+    bool open(char x){
+        return x=='(' || x=='{' || x=='[';
+    }
+    
+    bool match(char a,char b){
+        if(a=='(') return b==')';
+        if(a=='{') return b=='}';
+        if(a=='[') return b==']';
+        return false;
+    }
+    public:
     bool isValid(string s) {
-        stack<char> st;
-        for(char &curr:s){
-            if(curr=='(' || curr=='{' || curr=='['){
-                st.push(curr);
-            }else if(!st.empty()){
-                if(curr==')' && st.top()!='(')  return false;
-                else if(curr=='}' && st.top()!='{')  return false;
-                else if(curr==']' && st.top()!='[') return false;
-                else st.pop();
+        stack<char>st;
+        for(char x:s){
+            if(open(x)){
+                //if it is an opening brackett
+                st.push(x);
             }else{
-                return false;
+                //if it is a closing bracket
+                //1. if the stack is empty, return false
+                if(st.empty()) return false;
+                //2. if the curr bracket and top of stack dont match return false
+                if(!match(st.top(),x)) return false;
+                //3. if they match , pop out the top of stacl
+                else st.pop();
             }
         }
-        return st.empty();
+        if(!st.empty()) return false;
+        return true;
     }
 };
