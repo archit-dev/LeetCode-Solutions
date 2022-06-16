@@ -1,24 +1,23 @@
 class MyStack {
     private:
-        queue<int>q1,q2;
+        queue<int>q1;
     public:
     MyStack() {
         
     }
     
     void push(int x) {
-        //push the number in q2
-        q2.push(x);
-        //insert numbers from q1 to q2 element by element
-        while(!q1.empty()){
+        //push the number in q1
+        q1.push(x);
+        //get the length of q1 except for current elemnet
+        int len = q1.size()-1;
+        //push all the other elements into the queue again
+        while(len){
             int num = q1.front();
             q1.pop();
-            q2.push(num);
+            q1.push(num);
+            len--;
         }
-        //swap q1 and q2
-        queue<int> temp = q2;
-        q2 = q1;
-        q1 = temp;
     }
     
     int pop() {
