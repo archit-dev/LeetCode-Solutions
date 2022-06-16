@@ -1,37 +1,54 @@
 class MyQueue {
 public:
-    stack<int> s1, s2;
+    stack<int> input,output;
     MyQueue() {
         
     }
     
     void push(int x) {
-        //first move all elements from s1 to s2
-        while(!s1.empty()){
-            s2.push(s1.top());
-            s1.pop();
-        }
-        //push the current element into s1
-        s1.push(x);
-        //move all elements from s2 to s1
-        while(!s2.empty()){
-            s1.push(s2.top());
-            s2.pop();
-        }
+        //simply put the element in input stack
+        input.push(x);
     }
     
     int pop() {
-        int num = s1.top();
-        s1.pop();
+        //if both stacjs are empty it means queue is empty
+        if(input.empty() && output.empty()) return -1;
+        //if output is not empty, pop out its element
+        if(!output.empty()){
+            int num = output.top();
+            output.pop();
+            return num;
+        }
+        //otherwise, move all the elements from input to output and return top
+        while(!input.empty()){
+            output.push(input.top());
+            input.pop();
+        }
+        int num = output.top();
+        output.pop();
         return num;
     }
     
     int peek() {
-        return s1.top();
+        //if both stacjs are empty it means queue is empty
+        if(input.empty() && output.empty()) return -1;
+        //if output is not empty, pop out its element
+        if(!output.empty()){
+            int num = output.top();
+            return num;
+        }
+        //otherwise, move all the elements from input to output and return top
+        while(!input.empty()){
+            output.push(input.top());
+            input.pop();
+        }
+        int num = output.top();
+        return num;
     }
     
     bool empty() {
-        return s1.empty();
+        if(input.empty() && output.empty()) return true;
+        return false;
     }
 };
 
