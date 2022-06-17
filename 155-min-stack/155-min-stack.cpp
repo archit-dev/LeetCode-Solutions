@@ -1,31 +1,52 @@
 class MinStack {
 public:
-    stack<int>std,mini;
+    stack<long long> st;
+    long long minVal;
     MinStack() {
-        
+        minVal = LLONG_MAX;
     }
     
     void push(int val) {
-        if(std.empty()){
-            std.push(val);
-            mini.push(val);
+        long long val_ = val;
+        if(st.empty()){
+            minVal = val_;
+            st.push(val_);
             return;
         }
-        std.push(val);
-        mini.push(min(val,mini.top()));
+        //if not empty, check with min value
+        //if it is greater, simply insert it
+        if(val_>=minVal){
+            st.push(val_);
+        }else{
+            //if it is not greater, insert a flag value
+            st.push(2*val_-minVal);
+            minVal = val_;
+        }
     }
     
     void pop() {
-        std.pop();
-        mini.pop();
+        if(st.empty()) return;
+        //check the topmost value with min
+        if(st.top()>=minVal) st.pop();
+        //if not greater, modify the min val
+        else{
+            minVal = 2*minVal - st.top();
+            st.pop();
+        }
     }
     
     int top() {
-        return std.top();
+        //similar to pop, if topmost value is greater, return top
+        //otherwise, it'll be a flag and find out the accurate value 
+        //using the formula
+        if(st.empty()) return -1;
+        if(st.top()>=minVal) return st.top();
+        return minVal;
     }
     
     int getMin() {
-        return mini.top();
+        if(st.empty()) return -1;
+        return minVal;
     }
 };
 
