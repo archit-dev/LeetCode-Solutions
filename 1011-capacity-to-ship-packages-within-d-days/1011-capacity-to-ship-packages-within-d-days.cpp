@@ -1,20 +1,5 @@
 class Solution {
 public:
-    
-     bool canHoldAll(int weight,vector<int>& weights,int days){
-        int currentWeight = 0;
-        for(int i=0;i<weights.size();i++){
-            if(weights[i]+currentWeight<=weight){
-                currentWeight+=weights[i];
-            }else{
-                days-=1;
-                currentWeight = weights[i];
-            }
-            if(days==0) return false;
-        }
-        return true;
-    }
-    
 bool helper(vector<int>& weights,int days,int shipCapa){
     int numDays = 1;
     //i : 0->n 
@@ -31,7 +16,7 @@ bool helper(vector<int>& weights,int days,int shipCapa){
             capa-=weights[indx];
         }
     }
-    return days>=numDays;
+    return numDays<=days;
 }
 
 int shipWithinDays(vector<int>& weights, int days){ 
