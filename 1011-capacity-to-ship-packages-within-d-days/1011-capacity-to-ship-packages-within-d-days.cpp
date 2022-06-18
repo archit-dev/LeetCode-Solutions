@@ -1,6 +1,7 @@
 class Solution {
 public:
-    bool canHoldAll(int weight,vector<int>& weights,int days){
+    
+     bool canHoldAll(int weight,vector<int>& weights,int days){
         int currentWeight = 0;
         for(int i=0;i<weights.size();i++){
             if(weights[i]+currentWeight<=weight){
@@ -14,20 +15,44 @@ public:
         return true;
     }
     
-    int shipWithinDays(vector<int>& weights, int days) {
-        int low = *max_element(weights.begin(),weights.end());
-        int high = 0;
-        for(int x:weights) high+=x;
-        int ans = 0;
-        while(low<=high){
-            int mid = low + (high-low)/2;
-            if(canHoldAll(mid,weights,days)){
-                ans = mid;
-                high = mid-1;
-            }else{
-                low = mid+1;
-            }
+bool helper(vector<int>& weights,int days,int shipCapa){
+    int numDays = 1;
+    //i : 0->n 
+    // weight[i] <= shipCapa --> load cargo into the ship shipCapa-=weight[i];
+    // weight[i] > shipCapa --> we cannot load cargo , numDays +=1 , shipCapa
+    // days == numDays -> return true, return false
+    int capa = shipCapa;
+    for(int indx=0;indx<weights.size();indx++){
+        if(weights[indx]<=capa){
+            capa-=weights[indx];
+        }else{
+            capa=shipCapa;
+            numDays+=1;
+            capa-=weights[indx];
         }
-        return ans;
     }
+    return days>=numDays;
+}
+
+int shipWithinDays(vector<int>& weights, int days){ 
+    int lowerBound = *max_element(weights.begin(),weights.end());
+    int upperBound = 0;
+    for(int weight:weights) upperBound+=weight; 
+    int ans = upperBound;
+    while(lowerBound<=upperBound){
+        int capacity = lowerBound + (upperBound-lowerBound)/2;// (l+u)/2 = l/2 + u/2 - l/2 +l/2
+        if(helper(weights,days,capacity)){
+            //returns true, if the allocation is successful
+            ans = min(ans,capacity);
+            //C ->succeessful
+            //reduce the search space to left of C
+            upperBound = capacity-1;   
+        }else{
+            lowerBound = capacity+1;
+        }
+    }
+    return ans;
+}
+
+
 };
