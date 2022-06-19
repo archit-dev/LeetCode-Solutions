@@ -12,18 +12,19 @@ class Solution
 {
   public:
     //Function to find maximum of each subarray of size k.
-    vector <int> max_of_subarrays(int *nums, int n, int k)
+    vector <int> max_of_subarrays(int *arr, int n, int k)
     {
-        deque<pair<int,int> >dq;
-        vector<int> ans;
+        // your code here
+        vector<int>ans;
+        deque<pair<int,int> > dq;
         for(int i=0;i<n;i++){
-            if(!dq.empty() && dq.front().second==i-k){
+            if(dq.empty()==false && dq.front().second == i-k){
                 dq.pop_front();
             }
-            while(!dq.empty() && dq.back().first<=nums[i]){
+            while(!dq.empty() && dq.back().first <= arr[i]){
                 dq.pop_back();
             }
-            dq.push_back({nums[i],i});
+            dq.push_back({arr[i],i});
             if(i>=k-1){
                 ans.push_back(dq.front().first);
             }
