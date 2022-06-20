@@ -8,10 +8,10 @@ using namespace std;
 //User function template for C++
 
 class Solution{
-  public:
-    int longestAtMaxKSubstr(string &s,int k){
-        unordered_map<char,int>mp;
-        int len = -1, low = 0, high = 0;
+    public:
+    int longestKSubstr(string s, int k) {
+        int low = 0 , high = 0 , len = -1;
+        unordered_map<char,int> mp;
         while(high<s.size()){
             mp[s[high]]+=1;
             while(low<=high && mp.size()>k){
@@ -19,13 +19,12 @@ class Solution{
                 if(mp[s[low]]==0) mp.erase(s[low]);
                 low++;
             }
-            if(mp.size()==k) len = max(len,high-low+1);
-            high++;
+            if(mp.size()==k){
+                len = max(len,high-low+1);
+            }
+            high+=1;
         }
         return len;
-    }
-    int longestKSubstr(string s, int k) {
-        return longestAtMaxKSubstr(s,k);
     }
 };
 
