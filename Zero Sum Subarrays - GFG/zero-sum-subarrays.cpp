@@ -13,15 +13,21 @@ class Solution{
     //Function to count subarrays with sum equal to 0.
     ll findSubarray(vector<ll> arr, int n ) {
         //code here
-        unordered_map<int,int> mp;
-        mp[0] = 1;
-        ll sum = 0, ans = 0;
-        for(ll i=0;i<n;i++){
-            sum+=arr[i];
-            if(mp.find(sum)!=mp.end()) ans+=mp[sum];
-            mp[sum]+=1;
+        unordered_map<ll,ll> mp;
+        ll ptr = 0,sum=0 ;
+        ll count = 0;
+        mp[0]=1;
+        while(ptr<n){
+            sum+=arr[ptr];
+            if(mp.find(sum)!=mp.end()){
+                count+=mp[sum];
+                mp[sum]+=1;
+            }else{
+                mp[sum]+=1;
+            }
+            ptr++;
         }
-        return ans;
+        return count;
     }
 };
 
