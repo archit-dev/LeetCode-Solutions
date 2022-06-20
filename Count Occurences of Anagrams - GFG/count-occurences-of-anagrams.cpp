@@ -8,30 +8,31 @@ using namespace std;
 //User function template for C++
 class Solution{
 public:
-    bool same(int arr1[],int arr2[]){
-        for(int i=0;i<26;i++){
-            if(arr1[i]!=arr2[i]){
-                return false;
-            }
-        }
-        return true;
-    }
 	int search(string pat, string txt) {
-	    int alpha1[26]={0}, alpha2[26]={0};
-	    for(char x:pat) alpha1[x-'a'] +=1;
-	    int low = 0 , high = 0, n = txt.size(),count = 0, k = pat.size();
-	    while(high<n){
-	        alpha2[txt[high]-'a']+=1;
-	        if(high-low==k){
-	            alpha2[txt[low]-'a']-=1;
-	            low++;
+	    // code here
+	    unordered_map<char,int> mp1,mp2;
+	    for(char x:pat)mp2[x]+=1;
+	    int low = 0, high = 0 , count = 0;
+	    int reqMatch = pat.size(), curMatch = 0;
+	    while(high<txt.size()){
+	        if(mp2.find(txt[high])==mp2.end()){
+	            low = high+1; 
+	            mp1.clear();
+	            curMatch=0;
+	        }else{
+	            mp1[txt[high]]+=1;
+    	        curMatch+=1; 
+    	        while(low<=high && mp1[txt[high]]>mp2[txt[high]]){
+    	            mp1[txt[low]]-=1; 
+    	            curMatch-=1;
+    	            low++;
+    	        }
+    	        if(curMatch==reqMatch){
+    	            count+=1;
+    	           // cout<<"d\n";
+    	        }
 	        }
-	        if(high>=k-1){
-	            if(same(alpha1,alpha2)){
-	                count+=1;
-	            }
-	        }
-	        high++;
+	        high+=1;
 	    }
 	    return count;
 	}
