@@ -12,20 +12,21 @@ class Solution{
     public:
     int maxLen(vector<int>&A, int n)
     {   
-        int sum = 0 , len = 0;
         unordered_map<int,int> mp;
+        int ptr = 0;
         mp[0] = -1;
-        for(int i=0;i<n;i++){
-            sum+=A[i];
+        long long sum = 0;
+        int ans = 0;
+        while(ptr<n){
+            sum+=A[ptr];
             if(mp.find(sum)!=mp.end()){
-                //this sum has come before
-                len = max(len, i-mp[sum]);
+                ans = max(ans,ptr-mp[sum]);
+            }else{
+                mp[sum] = ptr;
             }
-            else{
-                mp[sum] = i;
-            }
+            ptr++;
         }
-        return len;
+        return ans;
     }
 };
 
