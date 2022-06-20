@@ -9,30 +9,23 @@ using namespace std;
 
 class Solution{
   public:
-    int longestKSubstr(string s, int k) {
-        int n = s.size();
-        unordered_map<char,int>alpha;
-        int ans = -1;
-        int low = 0 , high = 0;
-        while(high<n){
-            alpha[s[high]]+=1;
-            if(alpha.size()==k){
-                ans = max(ans, high-low+1);
-                high++;     
-            }else if(alpha.size()<k){
-                high++;
-            }else{
-                while(low<=high && alpha.size()>k){
-                    alpha[s[low]]-=1;
-                    if(alpha[s[low]]==0){
-                        alpha.erase(s[low]);
-                    }
-                    low++;
-                }
-                high++;
+    int longestAtMaxKSubstr(string &s,int k){
+        unordered_map<char,int>mp;
+        int len = -1, low = 0, high = 0;
+        while(high<s.size()){
+            mp[s[high]]+=1;
+            while(low<=high && mp.size()>k){
+                mp[s[low]]-=1;
+                if(mp[s[low]]==0) mp.erase(s[low]);
+                low++;
             }
+            if(mp.size()==k) len = max(len,high-low+1);
+            high++;
         }
-        return ans;
+        return len;
+    }
+    int longestKSubstr(string s, int k) {
+        return longestAtMaxKSubstr(s,k);
     }
 };
 
