@@ -10,28 +10,21 @@ class Solution{
   public:
     vector <int> countDistinct (int A[], int n, int k)
     {
-        int ptr = 0;
-        unordered_map<int,int>mp;
-        while(ptr<k){
-            mp[A[ptr]]+=1;
-            ptr++;
-        }
+        int low = 0 , high = 0;
         vector<int>ans;
-        int ptr1 = 0;
-        while(ptr<n){
-            int currSize = mp.size();
-            ans.push_back(currSize);
-            if(mp[A[ptr1]]==1){
-                mp.erase(A[ptr1]);
-            }else{
-                mp[A[ptr1]]-=1;
+        unordered_map<int,int> mp;
+        while(high<n){
+            if(high-low==k){
+                mp[A[low]]-=1;
+                if(mp[A[low]]==0) mp.erase(A[low]);
+                low++;
             }
-            mp[A[ptr]]+=1;
-            ptr++;
-            ptr1++;
+            mp[A[high]]+=1;
+            if(high>=k-1){
+                ans.push_back(mp.size());
+            }
+            high++;
         }
-        int currSize = mp.size();
-        ans.push_back(currSize);
         return ans;
     }
 };
