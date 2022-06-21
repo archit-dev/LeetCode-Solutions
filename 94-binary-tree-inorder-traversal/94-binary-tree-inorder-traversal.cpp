@@ -22,7 +22,27 @@ public:
     
     vector<int> inorderTraversal(TreeNode* root) {
         vector<int> ans;
-        inorder(root,ans);
+        if(!root) return ans;
+        stack<pair<TreeNode * ,int>>st;
+        TreeNode * curr = root;
+        st.push({root,1});
+        while(!st.empty()){
+            TreeNode * node = st.top().first;
+            int count = st.top().second;
+            if(count==1){
+                //inside preorder
+                st.top().second+=1;
+                if(node->left) st.push({node->left,1});
+            }else if(count==2){
+                //inside inorder
+                ans.push_back(node->val);
+                st.top().second+=1;
+                if(node->right) st.push({node->right,1});
+            }else{
+                //inside postorder
+                st.pop();
+            }
+        }
         return ans;
     }
 };
