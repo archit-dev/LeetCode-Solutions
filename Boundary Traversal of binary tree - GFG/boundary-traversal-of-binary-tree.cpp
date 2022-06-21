@@ -121,7 +121,6 @@ private:
         if(!root) return;
         if(isLeaf(root)){
             ans.push_back(root->data);
-            return;
         }
         addLeafNodes(root->left,ans);
         addLeafNodes(root->right,ans);
