@@ -5,8 +5,8 @@ public:
         int leftVal = helper(root->left,ans);
         int rightVal = helper(root->right,ans);
         int currData = root->val;
-        root->val = abs(rightVal-leftVal);
-        ans+=root->val;
+        int tilt = abs(rightVal-leftVal);
+        ans+=tilt;
         return currData+rightVal+leftVal;
     }
     
