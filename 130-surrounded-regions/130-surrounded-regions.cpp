@@ -1,51 +1,47 @@
 class Solution {
 public:
-    bool isValid(int x,int y,int m,int n){
-        if(x>=0 && x<m && y>=0 && y<n) return true;
+    bool isValid(int x,int y,int n,int m){
+        if(x>=0 && x<n && y>=0 && y<m) return true;
         return false;
     }
     
+    void dfsBoundary(vector<vector<char>>& board,int x,int y){
+        board[x][y] = '#';
+        int dx[4] = {1,-1,0,0};
+        int dy[4] = {0,0,1,-1};
+        for(int i=0;i<4;i++){
+            int newX = dx[i]+x;
+            int newY = dy[i]+y;
+            if(isValid(newX,newY,board.size(),board[0].size()))
+            {
+                if(board[newX][newY]=='O'){
+                    dfsBoundary(board,newX,newY);
+                }
+            }
+        }
+    }
+    
     void solve(vector<vector<char>>& board) {
-        int m = board.size(), n=board[0].size();
-        queue<pair<int,int>>Queue;
-        
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
-                if(board[i][j]=='O'){
-                    if(i==0 || j==0 || i==m-1 || j==n-1){
-                        board[i][j] = '#';
-                        Queue.push({i,j});
+        int n = board.size() , m = board[0].size();
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(i==0||j==0 || i==n-1 ||j==m-1){
+                    //boundary
+                    if(board[i][j]=='O'){
+                        dfsBoundary(board,i,j);
                     }
                 }
             }
         }
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(board[i][j]=='#'){
+                    board[i][j] = 'O';
+                }else if(board[i][j]=='O'){
+                    board[i][j] = 'X';
+                }
+            }
+        }
         
-        int dx[4] ={-1,1,0,0};
-        int dy[4] ={0,0,1,-1};
-
-        while(!Queue.empty()){
-            int x = Queue.front().first;
-            int y = Queue.front().second;
-            Queue.pop();
-            
-            for(int ind = 0;ind<4;ind++){
-                int newX = x+dx[ind];
-                int newY = y+dy[ind];
-                if(isValid(newX,newY,m,n) && board[newX][newY]=='O'){
-                    board[newX][newY] = '#';
-                    Queue.push({newX,newY});
-                }
-            }
-        }
-
-        for(int row=0;row<m;row++){
-            for(int col=0;col<n;col++){
-                if(board[row][col]=='#'){
-                    board[row][col]='O';
-                }else if(board[row][col]=='O'){
-                    board[row][col] = 'X';
-                }
-            }
-        }
     }
 };
