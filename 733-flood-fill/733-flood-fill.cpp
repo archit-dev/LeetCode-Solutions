@@ -1,43 +1,31 @@
 class Solution {
-private:
-    struct cell{
-        int x,y,color;
-        cell(int x_,int y_,int color_){
-            x=x_;
-            y=y_;
-            color=color_;
-        }
-    };
-    
+public:
     bool isValid(int x,int y,int n,int m){
-        if(x<n && x>=0 && y>=0 && y<m) return true;
+        if(x>=0 && x<n && y>=0 && y<m) return true;
         return false;
     }
-public:
-    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
-        queue<cell>Queue;
-        int n = image.size();
-        int m = image[0].size();
-        Queue.push(cell(sr,sc,newColor));
+    
+    void helper(vector<vector<int>>&image,int x,int y, int newCol,int oldCol){
+        image[x][y] = newCol;
         int dx[4] = {-1,1,0,0};
-        int dy[4] = {0,0,-1,1};
-        int oldColor = image[sr][sc];
-        image[sr][sc] = newColor;
-        if(newColor==oldColor) return image;
-        while(!Queue.empty()){
-            int x = Queue.front().x;
-            int y = Queue.front().y;
-            int color = Queue.front().color;
-            Queue.pop();
-            for(int ind=0;ind<4;ind++){
-                int newX = x+dx[ind];
-                int newY = y+dy[ind];
-                if(isValid(newX,newY,n,m) && image[newX][newY]==oldColor){
-                    Queue.push(cell(newX,newY,newColor));
-                    image[newX][newY] = newColor;
+        int dy[4] = {0,0,1,-1};
+        for(int i=0;i<4;i++){
+            int newX = dx[i] + x;
+            int newY = dy[i] + y;
+            if(isValid(newX,newY,image.size(),image[0].size()))
+            {
+                if(image[newX][newY]==oldCol){
+                    helper(image,newX,newY,newCol,oldCol);
                 }
             }
         }
+    }
+    
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+        int n = image.size(),m=image[0].size();
+        int originalColor = image[sr][sc];
+        if(originalColor==color) return image;
+        helper(image,sr,sc,color,originalColor);
         return image;
     }
 };
