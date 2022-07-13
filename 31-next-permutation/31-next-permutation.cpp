@@ -1,32 +1,38 @@
 class Solution {
 public:
-    void reverseArr(vector<int>&nums,int start,int end){
-        while(start<=end){
-            swap(nums[start],nums[end]);
-            start++;
-            end--;
+    void reverseArr(vector<int>& arr,int low,int high){
+        while(low<=high){
+            swap(arr[low],arr[high]);
+            low+=1;
+            high-=1;
         }
     }
     
     void nextPermutation(vector<int>& nums) {
         int n = nums.size();
-        int breakPoint = n-2;
-        while(breakPoint>=0){
-            if(nums[breakPoint]<nums[breakPoint+1]){
+        if(n==1) return;
+        int pivot = n-2;
+        //find the pivot element
+        while(pivot>=0){
+            if(nums[pivot]<nums[pivot+1]){
                 break;
             }
-            breakPoint--;
+            pivot--;
         }
-        int nextGreaterToBreakPoint = n-1;
-        if(breakPoint>=0){
-            while(nextGreaterToBreakPoint>breakPoint){
-                if(nums[nextGreaterToBreakPoint]>nums[breakPoint]){
-                    swap(nums[nextGreaterToBreakPoint],nums[breakPoint]);
+        // cout<<pivot<<"v";
+        
+        if(pivot>=0){
+            int greaterThanPivot = n-1;
+            while(greaterThanPivot>pivot){
+                if(nums[greaterThanPivot]>nums[pivot]){
+                    swap(nums[greaterThanPivot],nums[pivot]);
                     break;
                 }
-                nextGreaterToBreakPoint-=1;
+                greaterThanPivot--;
             }
+            // cout<<greaterThanPivot;
         }
-        reverseArr(nums,breakPoint+1, n-1);
+        
+        reverseArr(nums,pivot+1,n-1);
     }
 };
