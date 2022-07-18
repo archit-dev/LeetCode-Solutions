@@ -1,26 +1,31 @@
 class Solution {
 public:
-    int dp[13][10001];
-    int solve(vector<int>& coins,int amount, int currentIndex,int numberOfCoins){
-        if(currentIndex<0) return 1e9;
-        if(amount<0) return 1e9;
-        if(amount==0) return 0;
-        if(dp[currentIndex][amount]!=-1) return dp[currentIndex][amount];
-        int include = solve(coins,
-                            amount-coins[currentIndex],
-                            currentIndex,
-                            numberOfCoins+1)+1;
-        int exclude = solve(coins,
-                            amount,
-                            currentIndex-1,
-                            numberOfCoins);
-        return dp[currentIndex][amount] = min(include,exclude);
+    int dp[100000][20];
+    
+    int helper(vector<int>& coins,int amt,int ptr){
+        if(ptr==coins.size()){
+            if(amt==0) return 0;
+            return 1e9;
+        }
+        if(amt==0) return 0;
+        if(amt<0) return 1e9;
+        if(dp[amt][ptr]!=-1) return dp[amt][ptr];
+        int ans = -1;
+        if(coins[ptr]<=amt){
+            int take = 1 + helper(coins,amt-coins[ptr],ptr);
+            int dontTake = helper(coins,amt,ptr+1);
+            ans = min(take,dontTake);
+        }
+        else{
+            ans = helper(coins,amt,ptr+1);
+        }
+        return dp[amt][ptr] = ans;
     }
     
     int coinChange(vector<int>& coins, int amount) {
-        int n = coins.size();
+        int ptr = 0;
         memset(dp,-1,sizeof dp);
-        int ans = solve(coins,amount,n-1,0);
-        return ans!=1e9 ? ans:-1;
+        int ans = helper(coins,amount,ptr);
+        return ans!=1e9 ? ans : -1;
     }
 };
