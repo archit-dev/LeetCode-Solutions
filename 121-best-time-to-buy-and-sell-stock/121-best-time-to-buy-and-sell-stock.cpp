@@ -1,17 +1,18 @@
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
-        //the main idea is that, the maximum profit at
-        //any point can be prices[i] - minimumSoFar
-        int ans = 0;
-        int n = prices.size();
-        int minSoFar = INT_MAX;
-        for(int i=0;i<n;i++){
-            minSoFar = min(minSoFar,prices[i]);
-            if(prices[i]-minSoFar > ans){
-                ans = prices[i] - minSoFar;
+        //2 pointers => left = buy, right = sell
+        //buy low and sell high
+        int left = 0 , right = 1;
+        int netProfit = 0,n = prices.size();
+        while(right<n){
+            int currProfit = prices[right] - prices[left];
+            netProfit = max(currProfit,netProfit);
+            if(prices[left] > prices[right]){
+                left = right;
             }
+            right+=1;
         }
-        return ans;
+        return netProfit;
     }
 };
