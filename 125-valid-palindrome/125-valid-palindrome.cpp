@@ -1,14 +1,18 @@
 class Solution {
 public:
     bool isPalindrome(string s) {
-        string toCmp = "";
-        for(char x:s){
-            if(isalnum(x)){
-               toCmp+= (char)tolower(x); 
+        int low = 0, high = s.size()-1;
+        while(low<=high){
+            while(low<=high && !isalnum(s[low])) low++;
+            while(high>=low && !isalnum(s[high])) high--;
+            
+            if( (char)tolower(s[low]) != (char)tolower(s[high]) )
+            {
+                if(low<=high) return false;
             }
+            low+=1;
+            high-=1;
         }
-        string cpy = toCmp;
-        reverse(cpy.begin(),cpy.end());
-        return toCmp==cpy;
+        return true;
     }
 };
