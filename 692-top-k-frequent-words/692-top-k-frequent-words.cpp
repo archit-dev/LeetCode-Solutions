@@ -1,32 +1,20 @@
-#define pis pair<int,string>
-class myCmp {
-public:
-    bool operator() (const pis& a, const pis& b) {
-        if(a.first==b.first) return a.second < b.second;
-        return a.first > b.first;
-    }
-};
-
 class Solution {
 public:
     vector<string> topKFrequent(vector<string>& words, int k) {
+        map<string,int>mp;
+        for(string &s:words) mp[s]+=1;
         int n = words.size();
-        unordered_map<string,int>mp;
-        for(string &curr:words){
-            mp[curr]+=1;
-        }
-        
-        vector<string> ans(k);
-        priority_queue<pis,vector<pis>,myCmp>pq;
-        
+        vector<vector<string>>freq(n+1);
         for(auto &it:mp){
-            pq.push({it.second,it.first});
-            if(pq.size()>k) pq.pop();
+            freq[it.second].push_back(it.first);
         }
-        int ptr = k-1;
-        while(!pq.empty()){
-            ans[ptr--] = (pq.top().second);
-            pq.pop();
+        vector<string>ans;
+        for(int i=n;i>0;i--){
+            for(int j=0;j<freq[i].size();j++){
+                ans.push_back(freq[i][j]);
+                if(ans.size()==k) break;
+            }
+            if(ans.size()==k) break;
         }
         return ans;
     }
